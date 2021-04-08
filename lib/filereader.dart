@@ -1,16 +1,17 @@
 import 'package:flutter/services.dart';
 class FileReader {
-  static FileReader _instance;
+  static FileReader? _instance;
 
   factory FileReader() => _getInstance();
 
   static FileReader get instance => _getInstance();
 
   static FileReader _getInstance() {
-    if (_instance == null) {
-      _instance = FileReader._();
-    }
-    return _instance;
+    // if (_instance == null) {
+    //   _instance = FileReader._();
+    // }
+    _instance ??= FileReader._();
+    return _instance!;
   }
 
   static const MethodChannel _channel = const MethodChannel('wv.io/FileReader');
@@ -19,23 +20,23 @@ class FileReader {
 
   //X5 engin  load state
   // -1 loading  5 success 10 fail
-  void engineLoadStatus(Function(bool) loadCallback) async {
+  Future engineLoadStatus(Function(bool) loadCallback) async {
     _channel.invokeMethod("isLoad").then((status) {
       if (status == 5) {
-        loadCallback?.call(true);
+        loadCallback.call(true);
       } else if (status == 10) {
-        loadCallback?.call(false);
+        loadCallback.call(false);
       } else if (status == -1) {
-        _channel.setMethodCallHandler((call) {
+        _channel.setMethodCallHandler((call) async {
           if (call.method == "onLoad") {
             int status = call.arguments;
             if (status == 5) {
-              loadCallback?.call(true);
+              loadCallback.call(true);
             } else if (status == 10) {
-              loadCallback?.call(false);
+              loadCallback.call(false);
             }
           }
-          return;
+          return ;
         });
       }
     });
@@ -47,7 +48,7 @@ class FileReader {
     MethodChannel('wv.io/FileReader' + "_$platformViewId")
         .invokeMethod("openFile", filePath)
         .then((openSuccess) {
-      onOpen?.call(openSuccess);
+      onOpen.call(openSuccess);
     });
   }
 }

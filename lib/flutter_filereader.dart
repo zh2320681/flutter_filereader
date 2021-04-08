@@ -7,13 +7,13 @@ import 'package:flutter_filereader/filereader.dart';
 
 class FileReaderView extends StatefulWidget {
   final String filePath; //local path
-  final Function(bool) openSuccess;
-  final Widget loadingWidget;
-  final Widget unSupportFileWidget;
+  final Function(bool)? openSuccess;
+  final Widget? loadingWidget;
+  final Widget? unSupportFileWidget;
 
   FileReaderView(
-      {Key key,
-      this.filePath,
+      {Key? key,
+      this.filePath = "",
       this.openSuccess,
       this.loadingWidget,
       this.unSupportFileWidget})
@@ -25,7 +25,7 @@ class FileReaderView extends StatefulWidget {
 
 class _FileReaderViewState extends State<FileReaderView> {
   FileReaderState _status = FileReaderState.LOADING_ENGINE;
-  String filePath;
+  String filePath = "";
 
   @override
   void initState() {
